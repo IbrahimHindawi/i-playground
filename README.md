@@ -1,63 +1,42 @@
-# c-init
+# i-playground
 
-C project template wired for CMake, Ninja, clang-cl, and haikal code generation.
+Small I language playground project.
 
 ## Dependencies
 
 - Python 3
-- Git
 - CMake
 - Ninja
-- LLVM/Clang with `clang-cl` on `PATH`
-- Visual Studio Build Tools or another environment that provides the MSVC Windows SDK/linker toolchain
+- LLVM/Clang with `clang-cl`
+- `I.exe` on `PATH`, usually from `C:\devel\i-windows-x64`
+- `std` beside `I.exe`, copied by the I compiler build to `C:\devel\i-windows-x64\std`
 
-On Windows, run the commands from a shell where the MSVC toolchain is available, such as a Visual Studio Developer Command Prompt, or make sure `clang-cl`, `link`, `cmake`, and `ninja` are all on `PATH`.
-
-## Setup
-
-Initialize submodules:
-
-```powershell
-git submodule update --init --recursive
-```
-
-## Build
-
-Configure the debug build:
-
-```powershell
-python bunyan.py config debug
-```
-
-Build debug:
-
-```powershell
-python bunyan.py build debug
-```
-
-Build and run:
+## Build And Run
 
 ```powershell
 python bunyan.py run debug
 ```
 
-Build and launch under the debugger:
+Bunyan runs:
 
-```powershell
-python bunyan.py debugexe debug
+```text
+I.exe compile src/main.i -> build/i_gen/main.c + build/i_gen/main.h
+cmake config/build
+build/i-playground.exe
 ```
+
+The project imports the standard library through:
+
+```i
+import "std/Print.i"
+```
+
+`I.exe` resolves that through the `std` folder beside the compiler executable. Use Bunyan `i_import_dirs` only for project-local libraries.
 
 Other configs:
 
 ```powershell
 python bunyan.py build release
 python bunyan.py build reldebug
-```
-
-Clean generated build directories:
-
-```powershell
 python bunyan.py clean
 ```
-
-The build wrapper compiles `extern/haikal`, runs `haikal.exe --entry src/main.c --meta extern/haikal/src/meta_arena` from the repository root, then builds `c-init`.

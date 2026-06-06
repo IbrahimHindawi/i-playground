@@ -1,39 +1,11 @@
 from __future__ import annotations
 
-from scripts.bunyan import BuildContext, cmake_build, cmake_configure, main, run_cmd
-
-
-def build_haikal(ctx: BuildContext) -> None:
-    haikal_build_dir = ctx.root_dir / "extern" / "haikal" / "build"
-    haikal_build_dir.mkdir(parents=True, exist_ok=True)
-
-    cmake_configure(
-        source_dir=ctx.root_dir / "extern" / "haikal",
-        build_dir=haikal_build_dir,
-        generator=ctx.generator,
-        c_compiler=ctx.c_compiler,
-        build_type="Debug",
-    )
-    cmake_build(haikal_build_dir)
-    run_cmd(
-        [
-            haikal_build_dir / "haikal.exe",
-            "--entry",
-            ctx.root_dir / "src" / "main.c",
-            "--meta",
-            ctx.root_dir / "extern" / "haikal" / "src" / "meta_arena",
-        ],
-        cwd=ctx.root_dir,
-    )
+from scripts.bunyan import main
 
 
 if __name__ == "__main__":
     main(
-        project_name="c-init",
-        hooks={
-            "pre_build": build_haikal,
-        },
-        extra_clean_paths=(
-            "extern/haikal/build",
-        ),
+        project_name="i-playground",
+        mode="i",
+        i_entry="src/main.i",
     )

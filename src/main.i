@@ -21,7 +21,9 @@ main: proc(argc: i32, argv: **char)-> i32 = {
     memops_arena_initialize(&arena);
 
     p: payload = {};
+    p.x = 42.0;
     name: *const char = payload<>.name;
+    printfmt("payload.x {}\n", p.x);
     printfmt("name {}\n", name);
     for (i: i32 = 0; i < payload<>.field_count; i += 1) {
         printfmt("field[{}] = {}\n", i, payload<>.fields[i].name);
@@ -42,6 +44,7 @@ main: proc(argc: i32, argv: **char)-> i32 = {
     for (i: i32 = 0; i < len; i += 1 ) {
         printfmt("i = {}, ", numbers.data[i]); 
     }
+    printfmt("\n");
 
     numberchain: *List<payload>;
     numberchain = List<payload>create(&arena);
@@ -51,7 +54,7 @@ main: proc(argc: i32, argv: **char)-> i32 = {
 
     node: *Node<payload> = numberchain.*.head;
     for (i: i32 = 0; i < numberchain.*.length; i += 1) {
-        printf("%f", node.*.data.x);
+        printf("%f\n", node.*.data.x);
         node = node.*.next;
     }
 
